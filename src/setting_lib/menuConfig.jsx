@@ -6,13 +6,14 @@ import {HiOutlineViewGrid,
 	HiOutlineCog,
 	HiPrinter,
     HiOutlinePresentationChartBar,
-    HiOutlineLogin
+    HiOutlineLogin,
+    HiOutlineIdentification
  } from 'react-icons/hi';
 
 
  /**
   * @function SidebarItems
-  * @description Funcion que devuele los link del menu lateral principal
+  * @description Funcion que devuele los items del menu lateral principal
   * @param No aplica
   */
  export const SidebarItems =[
@@ -20,35 +21,42 @@ import {HiOutlineViewGrid,
         key: 'home',
         label: 'Inicio',
         LinkPath: '/home',
-        icon: <HiOutlineHome/>,
-        rol:'public'
+        icon: HiOutlineHome,
+        rol:'PUBLIC'
     },
     {
         key: 'statistics',
         label: 'Estadística',
         LinkPath: '/statistics',
-        icon: <HiOutlinePresentationChartBar/>,
-        rol:'admin'
+        icon: HiOutlinePresentationChartBar,
+        rol:'USER'
     },
     {
         key: 'order',
         label: 'Pedido',
         LinkPath: '/order',
-        icon: <HiOutlineShoppingCart/>,
-        rol:'client'
+        icon: HiOutlineShoppingCart,
+        rol:'CLIENT'
     },
     {
         key: 'products',
         label: 'Productos',
         LinkPath: '/products',
-        icon: <HiOutlineHome/>,
-        rol:'admin'
+        icon: HiOutlineHome,
+        rol:'PUBLIC'
+    },
+    {
+        key: 'reports',
+        label: 'Reportes',
+        LinkPath: '/reports',
+        icon: HiPrinter,
+        rol:'ADMIN'
     }
 ]
 
  /**
   * @function SidebarItemFooter
-  * @description Funcion que devuele los link del menu lateral inferior (Pie de pagina)
+  * @description Funcion que devuele los Link del menu lateral inferior (Pie de pagina)
   * @param No aplica
   */
  export const SidebarItemFooter =[
@@ -57,28 +65,29 @@ import {HiOutlineViewGrid,
         label: 'Login',
         LinkPath: '/login',
         icon: <HiOutlineLogin/>,
-        rol:'public'
-    },
-    {
-        key: 'logout',
-        label: 'Salir',
-        LinkPath: '/logout',
-        icon: <HiOutlineLogin/>,
-        rol:'public'
+        rol:'PUBLIC'
     },
     {
         key: 'setting',
         label: 'Panel',
         LinkPath: '/setting',
         icon: <HiOutlineCog/>,
-        rol:'admin'
-    },
-    {
-        key: 'reports',
-        label: 'Reportes',
-        LinkPath: '/reports',
-        icon: <HiPrinter/>,
-        rol:'admin'
+        rol:'ADMIN'
     }
 ]
 
+/*
+    {
+        key: 'register',
+        label: 'Registrase',
+        LinkPath: '/register',
+        icon: <HiOutlineIdentification/>,
+        rol:'PUBLIC'
+    },
+    {
+    key: 'logout',
+    label: 'Salir',
+    LinkPath: '/logout',
+    icon: <HiOutlineLogin/>,
+    rol:'PUBLIC'
+}, */

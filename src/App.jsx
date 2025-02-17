@@ -1,28 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Sidebar from './components/Sidebar'
+import React from 'react';
+//import { createRoot } from 'react-dom/client';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+// Pges de la APIs
+import { Home,Login, LogOut,NotFound,Register } from './pages/pages';
+//Paginas Privadas
+import { Sidebar,Main,Order,Products,Reports,Statistics,Setting } from './components/components';
+import { AuthProvider } from './context/AuthContext'; // Importa el contexto
+import PrivateRoute from './components/PrivateRoute'; // Componente para validar rutas privadas
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div className="flex"> {/* Contenedor flex para Sidebar y el contenido */}
-        <Sidebar/>
-        <div className="flex-grow p-4"> {/* Esta clase hace que el contenido ocupe el espacio restante */}
-          <Routes>
-            {/* Componentes Publicos */}
-            <Route path="/home" element={<Home/>} />
-            {/* Componentes Privados */}
-            <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          </div>
-      </div>
-      </>
+      <main className='w-full bg-slate-200 h-screen flex justify-between items-start font-oswald font-normal'>
+        <BrowserRouter>
+          <AuthProvider>
+            <Sidebar/>
+            <Routes>
+              <Route path="/" element = {<Main />} >
+                {/* Componentes Publicos */}
+                <Route index element = {<Home/>} />
+                <Route path="/home" element = {<Home/>} />
+                <Route path='/login' element = {<Login/>} />
+                <Route path="/register" element={ <Register /> } />
+                {/* Componentes Privados */}
+                <Route path="/order" element={ <PrivateRoute> <Order /> </PrivateRoute> } />
+                <Route path="/products" element={ <PrivateRoute> <Products /> </PrivateRoute> } />
+                <Route path="/Statistics" element={ <PrivateRoute> <Statistics /> </PrivateRoute> } />
+                <Route path="/reports" element={ <PrivateRoute> <Reports /> </PrivateRoute> } />
+                <Route path="/setting" element={ <PrivateRoute> <Setting /> </PrivateRoute> } />
+                <Route path="/logout" element={ <PrivateRoute><LogOut /> </PrivateRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </BrowserRouter>,
+      </main>
+    </>
   )
 }
 
-export default App
+export default App;

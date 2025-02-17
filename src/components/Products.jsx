@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./Pagination";
 
+/**
+ * @description Component to show the Products for page
+ * @param {number} pageSize - Numero de Registro por paginas que se desean mostrar
+ * @param {number} pageNavegate  - Numero de la Pagina a navegar o mostrar
+ */
 function Products () {
-  const[data,setData] = useState({ registers: [] }); //Estado para los Productos
+  const[data,setData] = useState({ results: [] }); //Estado para los Productos
   const[currentPage,setCurrentPage] = useState(1); //Pagina concurrente
   const[totalPages,setTotalPages] = useState(1); //Total de paginas que tiene la consulta
   const[pageNavegate,setPageNavegate] = useState(1); //Numero de la Pagina a navegar
@@ -12,11 +17,13 @@ function Products () {
   const header = {
     method:"POST",
     headers:{ 'Content-Type': 'application/json'},
-    body: JSON.stringify({"nPages" : pageNavegate,"nPageSize": pageSize }) // Envía los datos de inicio de sesión
+    body: JSON.stringify({"nPages" : pageNavegate,"nPageSize": pageSize }) // Envía los datos de para la paginacion
   };
 
   useEffect ( ()=> {
-    fetch ('http://localhost:8000/products_page',header)
+    //fetch ('ara.servehttp.com:8000/products_page',header)
+    //fetch ('http://localhost:8000/products_page',header)
+    fetch(`${import.meta.env.VITE_API_URL}/products_page`,header)
     .then(  (response)=> {
       if (!response.ok) {
           throw new Error("Error en response"); //Maneja error
@@ -27,7 +34,7 @@ function Products () {
     .then( (response) => {
       console.log('Respuesta de la API:', response);
       //console.log('registers:', response.registers);
-      setData(response.registers || []); // Asegúrate de que sea un array
+      setData(response.results || []); // Asegúrate de que sea un array
       setTotalPages(response.total_pages); //Total de paginas que tiene la consulta
       setError('');
       //console.log("Respuesta de la API (response): ",response);
@@ -58,7 +65,7 @@ function Products () {
   }
 
   // Cambiar la condición para verificar si hay registros
-  if (data.length===0  ) {
+  if ( data.length === 0  ) { // data.length===0
     return <h1 className="flex justify-center py-4">Loading...</h1>;
   }
 
@@ -70,18 +77,15 @@ function Products () {
           <div>PRODUCTOS</div>
             <div className="flex-grow overflow-y-auto">
               {data && Array.isArray(data) && data.map(product => (
-                <div>
-                  <div key={product.co_art}>{product.art_des}</div>
+                <div key={product.co_art}>
+                  <div>{product.art_des}</div>
                 </div>
                 ))}
             </div>
           <div className="mt-auto">
-            <Pagination numberPage={currentPage}
-              numberTotalPages={totalPages}
-              changeFirstPage={handleFirstPage}
-              changePreviousPage={handlePreviousPage}
-              changeNextPage={handleNextPage}
-              changeLastPage={handleLastPage}
+            <Pagination numberPage={currentPage} numberTotalPages={totalPages}
+              changeFirstPage={handleFirstPage} changePreviousPage={handlePreviousPage}
+              changeNextPage={handleNextPage} changeLastPage={handleLastPage}
             />
           </div>
         </div>

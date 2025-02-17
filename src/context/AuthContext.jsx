@@ -1,51 +1,45 @@
-import React, { createContext, useContext, useState } from 'react';
-
+import React, { createContext, useContext, useEffect, useState } from 'react';
 const AuthContext = createContext();
 
+/**
+  * @function AuthProvider
+  * @description Funcion Valida el Inicio de Sesión y Salida
+  * @param {userData}: Un objeto JSON con la informacion del Usuario y El Token
+ */
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userAuth,setUserAuth] = useState(null);
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
-  const register = () => setIsAuthenticated(true); // Simulación de registro
+  // Intenta recuperar los datos del usuario al cargar el componente
+  useEffect(() => {
+  const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUserAuth(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+    }
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const login = (userData) => {
+    setUserAuth(userData[1].user); // Actualiza el usuario logueado
+    setIsAuthenticated(true);
+    //console.log(`AuthContext userAuth :`,userAuth);
+    localStorage.setItem('authToken', JSON.stringify(userData[0].token)); // Almacena el token JWT
+    localStorage.setItem('user', JSON.stringify(userData[1].user)); // Asegúrate de almacenar los datos del usuario si los necesitas
+  };
+
+  const logOut = () => {
+    setIsAuthenticated(false);
+    setUserAuth(null);
+    localStorage.removeItem('authToken'); // Elimina el token
+    localStorage.removeItem('user'); // Elimina los datos del usuario Logeado
+  }
+  const register = () => setIsAuthenticated(false); // Simulación de registro
+
+    return (
+        <AuthContext.Provider value={{ isAuthenticated,userAuth, login, logOut, register }}>
+        {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);
-
-
-
-
-/*
-// src/AuthContext.js  
-import React, { createContext, useContext, useState } from 'react';  
-
-const AuthContext = createContext();  
-
-export const AuthProvider = ({ children }) => {  
-  const [isAuthenticated, setIsAuthenticated] = useState(false);  
-
-  const login = () => {  
-    setIsAuthenticated(true);  
-  };  
-
-  const logout = () => {  
-    setIsAuthenticated(false);  
-  };  
-
-  return (  
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>  
-      {children}  
-    </AuthContext.Provider>  
-  );  
-};  
-
-export const useAuth = () => {  
-  return useContext(AuthContext);  
-}; 
-*/
